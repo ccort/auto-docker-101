@@ -26,7 +26,8 @@ RUN a2enmod cgi \
 # Copying vhost for overpass
 COPY ./vhost.conf /etc/apache2/sites-available/ov.conf
 
-RUN a2ensite ov && a2dissite 000-default
+RUN a2ensite ov 
+RUN a2dissite 000-default
 
 
 
