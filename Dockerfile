@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:16.04 as builder
 
 # Install dependencies
 RUN apt-get update \
@@ -29,9 +29,7 @@ COPY ./vhost.conf /etc/apache2/sites-available/ov.conf
 RUN a2ensite ov 
 RUN a2dissite 000-default
 
-
-
-
+FROM ubuntu:16.04 as runstage
 
 
 CMD service apache2 start
