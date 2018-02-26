@@ -29,9 +29,10 @@ COPY ./vhost.conf /etc/apache2/sites-available/ov.conf
 RUN a2ensite ov 
 RUN a2dissite 000-default
 
+RUN wget -O /mexico_small.osm https://overpass-api.de/api/map?bbox=-99.6185,19.0725,-98.6023,19.8649 --no-check-certificate
 
+RUN mkdir -p "$DB_DIR/"
+RUN cat "$PLANET_FILE" | /srv/osm3s/bin/update_database --db-dir=$DB_DIR/ --meta
 
-
-
-
-CMD service apache2 start
+CMD service apache2 start && $EXEC_DIR/bin/dispatcher --osm-base --meta --db-dir=$DB_DIR
+# CMD service apache2 start
