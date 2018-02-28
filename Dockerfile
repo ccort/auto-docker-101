@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:16.04 as builder
 
 # Install dependencies
 RUN apt-get update \
@@ -16,6 +16,17 @@ RUN curl -o osm-3s_v$OSM_VER.tar.gz http://dev.overpass-api.de/releases/osm-3s_v
   && ./configure CXXFLAGS="-O2" --prefix="$EXEC_DIR" \
   && make install
 
+FROM ubuntu:16.04 as prod
+
+# Assigning Environmental variables
+ARG OSM_VER=0.7.54
+ENV EXEC_DIR=/srv/osm3s
+ENV DB_DIR=/srv/osm3s/db
+
+# Install dependencies
+RUN apt-get update \
+    && apt-get install -y --force-yes --no-install-recommends curl wget osmium-tool bzip2 apache2
+
 # Setting up apache configurations and modules
 RUN a2enmod cgi \
     && a2enmod ext_filter \
@@ -28,6 +39,8 @@ COPY ./vhost.conf /etc/apache2/sites-available/ov.conf
 
 RUN a2ensite ov 
 RUN a2dissite 000-default
+
+COPY --from=builder "$EXEC_DIR"
 
 ARG PLANET_FILE=/mexico_small.osm
 RUN wget -O "$PLANET_FILE" https://overpass-api.de/api/map?bbox=-99.6185,19.0725,-98.6023,19.8649 --no-check-certificate
