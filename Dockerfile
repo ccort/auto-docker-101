@@ -14,7 +14,7 @@ RUN apt-get update \
     && tar -zxvf osm-3s_v${OSM_VER}.tar.gz \
     && cd osm-3s_v* \
     && ./configure CXXFLAGS="-O2" --prefix="$EXEC_DIR" \
-    && make install
+    && make install \
     && rm -rf /var/lib/apt/lists/*
 
 FROM ubuntu:16.04 as prod
