@@ -17,7 +17,7 @@ RUN apt-get update \
     && make install \
     && rm -rf /var/lib/apt/lists/*
 
-FROM ubuntu:16.04 as prod
+FROM alpine:3.7 as prod
 
 # Assigning Environmental variables
 ARG OSM_VER=0.7.54
@@ -25,9 +25,7 @@ ENV EXEC_DIR=/srv/osm3s
 ENV DB_DIR=/srv/osm3s/db
 
 # Install dependencies
-RUN apt-get update \
-    && apt-get install -y --force-yes --no-install-recommends wget osmium-tool bzip2 apache2 \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache wget osmium-tool bzip2 apache2
 
 # Setting up apache configurations and modules
 RUN a2enmod cgi \
