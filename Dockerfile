@@ -25,7 +25,7 @@ ENV EXEC_DIR=/srv/osm3s
 ENV DB_DIR=/srv/osm3s/db
 
 # Install dependencies
-RUN apk add --no-cache wget osmium-tool bzip2 apache2
+RUN apk add --no-cache wget bzip2 apache2 # osmium-tool
 
 # Setting up apache configurations and modules
 RUN a2enmod cgi \
