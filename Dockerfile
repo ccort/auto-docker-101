@@ -46,7 +46,7 @@ RUN a2ensite ov && a2dissite 000-default && mkdir -p "$EXEC_DIR/"
 COPY --from=builder "$EXEC_DIR" "$EXEC_DIR"
 
 ARG PLANET_FILE=/mexico_small.osm
-RUN wget -O "$PLANET_FILE" https://overpass-api.de/api/map?bbox=-99.6185,19.0725,-98.6023,19.8649 --no-check-certificate \
+RUN wget -O "$PLANET_FILE" https://overpass-api.de/api/map?bbox=-99.6185,19.0725,-98.6023,19.8649 --no-check-certificate -nv \
     && mkdir -p "$DB_DIR/" && cat "$PLANET_FILE" | /srv/osm3s/bin/update_database --db-dir=$DB_DIR/ --meta
 
 CMD service apache2 start && $EXEC_DIR/bin/dispatcher --osm-base --meta --db-dir=$DB_DIR
