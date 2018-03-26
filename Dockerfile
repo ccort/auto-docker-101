@@ -1,5 +1,7 @@
 FROM ubuntu:16.04 as builder
 
+MANTAINER ccort@github
+
 # Assigning Environmental variables
 ARG OSM_VER=0.7.54
 ENV EXEC_DIR=/srv/osm3s
