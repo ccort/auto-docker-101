@@ -15,8 +15,8 @@ RUN apt-get update \
     && curl -o osm-3s_v$OSM_VER.tar.gz http://dev.overpass-api.de/releases/osm-3s_v$OSM_VER.tar.gz \
     && tar -zxvf osm-3s_v${OSM_VER}.tar.gz \
     && cd osm-3s_v* \
-    && ./configure CXXFLAGS="-O2" --prefix="$EXEC_DIR" \
-    && make install \
+    #&& ./configure CXXFLAGS="-O2" --prefix="$EXEC_DIR" \
+    #&& make install \
     && rm -rf /var/lib/apt/lists/*
 
 FROM ubuntu:16.04 as prod
