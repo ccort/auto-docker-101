@@ -15,8 +15,8 @@ RUN apt-get update \
     && curl -o osm-3s_v$OSM_VER.tar.gz http://dev.overpass-api.de/releases/osm-3s_v$OSM_VER.tar.gz \
     && tar -zxvf osm-3s_v${OSM_VER}.tar.gz \
     && cd osm-3s_v* \
-    #&& ./configure CXXFLAGS="-O2" --prefix="$EXEC_DIR" \
-    #&& make install \
+    && ./configure CXXFLAGS="-O2" --prefix="$EXEC_DIR" \
+    && make install \
     && rm -rf /var/lib/apt/lists/*
 
 FROM ubuntu:16.04 as prod
@@ -43,11 +43,11 @@ COPY ./vhost.conf /etc/apache2/sites-available/ov.conf
 
 RUN a2ensite ov && a2dissite 000-default && mkdir -p "$EXEC_DIR/"
 
-#COPY --from=builder "$EXEC_DIR" "$EXEC_DIR"
+COPY --from=builder "$EXEC_DIR" "$EXEC_DIR"
 
 ARG PLANET_FILE=/mexico_small.osm
-#RUN wget -O "$PLANET_FILE" https://overpass-api.de/api/map?bbox=-99.6185,19.0725,-98.6023,19.8649 --no-check-certificate \
-#    && mkdir -p "$DB_DIR/" && cat "$PLANET_FILE" | /srv/osm3s/bin/update_database --db-dir=$DB_DIR/ --meta
+RUN wget -O "$PLANET_FILE" https://overpass-api.de/api/map?bbox=-99.6185,19.0725,-98.6023,19.8649 --no-check-certificate \
+    && mkdir -p "$DB_DIR/" && cat "$PLANET_FILE" | /srv/osm3s/bin/update_database --db-dir=$DB_DIR/ --meta
 
-CMD service apache2 start #&& $EXEC_DIR/bin/dispatcher --osm-base --meta --db-dir=$DB_DIR
+CMD service apache2 start && $EXEC_DIR/bin/dispatcher --osm-base --meta --db-dir=$DB_DIR
 # CMD service apache2 start
