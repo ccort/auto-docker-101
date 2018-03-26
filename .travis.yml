@@ -1,11 +1,14 @@
 
 sudo: required
-
+language: python
 services:
   - docker
-
-before_install:
+install:
+  - echo "install nothing!"
+script:
+  - echo "no tests!"
+  
+after_success:
+  - docker --version
   - docker build .
 
-after_script:
-  - docker images
