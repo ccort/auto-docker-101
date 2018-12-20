@@ -1,4 +1,4 @@
-FROM ubuntu:16.04 as builder
+FROM ubuntu:18.04 as builder
 
 MAINTAINER ccort@github
 
@@ -19,7 +19,7 @@ RUN apt-get update \
     && make install \
     && rm -rf /var/lib/apt/lists/*
 
-FROM ubuntu:16.04 as prod
+FROM ubuntu:18.04 as prod
 
 # Assigning Environmental variables
 ARG OSM_VER=0.7.54
